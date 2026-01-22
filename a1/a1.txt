@@ -1,0 +1,61 @@
+Programming for this assignment should be done in Python 3 using the igraph library with some data visualization coming from matplotlib.
+
+This searchable reference for python-igraph is useful.
+
+You are to submit this assignment in Brightspace as a single zip file, with the following structure:
+
+<student_id>/<input_graph_1>
+<student_id>/<input_graph_2>
+<student_id>/part1.py
+<student_id>/part2.py
+<student_id>/analysis.txt  (only for students in COMP5900)
+
+If you find yourself struggling with technical issues related to using Python, igraph, or matplotlib, please feel free to ask questions on the Brightspace course forum. There are probably other students experiencing the same issues.
+1. Exploratory Analysis
+
+Choose two social network graphs each with at least 10,000 vertices. One place to find these is the Stanford Large Network Dataset Collection, but you can also take any other data you are able to find, as long as the data comes from something that could broadly be considered a social network. Treat your graphs as undirected, with no self-loops, and no parallel edges. (Be sure to eliminate self-loops and parallel edges if they are present in the data.)
+
+Write a program with the name part1.py that reads each of the graphs into an igraph.Graph object. Your program should print out basic information about each graph, including
+
+    the number of vertices (n)
+    the number of edges (m)
+    the number of degree-0 vertices
+
+Your program should also compare the two graphs by printing (side-by-side) their
+
+    maximum degree
+    Average degree: ∑v∈V(G)degG(v)
+    Median degree
+    Edge density: m/(n2)
+    Local clustering coefficient (don't include the contribution of vertices of degree less than 2)
+
+Your program should end by using matplotlib to display one plot that gives the degree histogram of each graph as a bar chart using a different colour for each graph.
+
+It will be helpful, for the next question, if you structure your program so that most of this is done in one function that takes two graphs as input and does this comparison.
+2. Comparison with Random Graphs
+
+Choose the most interesting of the two graphs from the first question and use it for this part. Write a second program called part2.py that compares your chosen graph to each of the following graphs, in the same way the first part of the assignment compares your two chosen graphs:
+
+    An Erdos-Renyi Gn,p random graph with the same number of vertices and with p be the edge density of your chosen graph. (You can generate this with the igraph.Graph.Erdos_Renyi() function.)
+
+    An Erdos-Renyi Gn,m random graph with the same number of vertices and edges as your chosen graph. (You can generate this with the igraph.Graph.Erdos_Renyi() function.)
+
+    A k-regular graph with the same number of vertices as your chosen graph. Here, k should be the average degree of your chosen graph, rounded to the nearest integer. (You can generate this with the igraph.Graph.K_Regular() function.)
+
+    A random graph that has the same number of vertices and exactly the same degree sequence as your chosen graph. You can generate this with the igraph.Graph.Degree_Sequence() function.
+    Warning: By default this method generates a non-simple graph using the configuration method. To get a simple graph, you need to use the method parameter. My initial testing on the 37700-vertex Github graph suggests that the fastest methods are vl (9.8s) and edge_switching_simple (37.6s). The fast_heur_simple, and configuration_simple are unuseable.
+
+    A random geometric graph (on the torus) with the same number of vertices as your chosen graph and with the radius chosen so that the expected average degree of the random graph is equal to the average degree of your chosen graph. (Determining this radius is a probability exercise for you to solve. You can generate this with the igraph.Graph.GRG() command.)
+
+3. Analysis of Results (only for students enrolled in COMP5900)
+
+If you are enrolled in COMP5900, include a text file analysis.txt that discusses your findings. It should include
+
+    A short discussion of where the data came from in your two chosen graphs in Part 1.
+
+    A discussion of the differences between these two graphs, and what these differences might tell you about these social networks. (Why) do their users behave differently? If they are networks with a similar purpose, why are their graphs so different? If they are different kinds of networks, why are they so similar.
+
+    For each of the random graphs considered in part 2, explain what aspects of your chosen graph the random graph fails to model and give a (brief) explanation as to why this happens.
+
+    Conclude with a discussion of how you might try to find a "better" random model that more closely models your chosen graph.
+
