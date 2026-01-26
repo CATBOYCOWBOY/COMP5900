@@ -1,5 +1,12 @@
+import numpy as np
 import igraph as ig
 import pandas as pd
+import math
+
+def global_clustering_coefficient(graph: ig.Graph) -> float:
+    num_triangles = len(graph.cliques(min=3, max=3))
+    binom_sum = sum(math.comb(deg, 2) for deg in graph.degree() if deg >= 2)
+    return num_triangles / binom_sum if binom_sum > 0 else 0.0
 
 def analyze_git_web_dataset() -> ig.Graph:
     vertices = pd.read_csv('git_web_ml/musae_git_target.csv').set_index('id')
@@ -10,9 +17,6 @@ def analyze_git_web_dataset() -> ig.Graph:
     )
 
     graph.vs['username'] = vertices['name'].tolist()
-
-    print("Github Web Dataset Graph Analysis:")
-    print(graph.summary())
 
     return graph
 
@@ -28,10 +32,35 @@ def analyze_twitch_dataset() -> ig.Graph:
 
     return graph
 
-def compare_datasets(graph1: ig.Graph, graph2: ig.Graph):
-    pass
+def compare_graphs(graph1: ig.Graph, graph2: ig.Graph):
+    print("\n\nGraph Comparison:")
+    print("----------------------------------------\n")
+    print("Graph 1 maximum degree: ", np.max(graph1.degree()))
+    print("Graph 2 maximum degree: ", np.max(graph2.degree()))
+    print("\nGraph 1 average degree: ", np.average(graph1.degree()))
+    print("Graph 2 average degree: ", np.average(graph2.degree()))
+    print("\nMedian degree of Graph 1: ", np.median(graph1.degree()))
+    print("Median degree of Graph 2: ", np.median(graph2.degree()))
+    print("\nGraph 1 density: ", np.sum(graph1.degree()) / math.comb(graph1.vcount(), 2))
+    print("Graph 2 density: ", np.sum(graph2.degree()) / math.comb(graph2.vcount(), 2))
+    print("\nGraph 1 average clustering coefficient: ", global_clustering_coefficient(graph1))
+    print("Graph 2 average clustering coefficient: ", global_clustering_coefficient(graph2))
 
 if __name__ == "__main__":
     git_web_graph = analyze_git_web_dataset()
+
+    print("rozemberczki2019multiscale Github Web Dataset Graph Analysis (Graph 1):")
+    print(f"  Number of vertices: {git_web_graph.vcount()}")
+    print(f"  Number of edges: {git_web_graph.ecount()}")
+    print(f"  Number of degree-0 vertices: {sum(1 for deg in git_web_graph.degree() if deg == 0)}")
+
+    print("\n----------------------------------------\n")
+
     twitch_graph = analyze_twitch_dataset()
-    compare_datasets(git_web_graph, twitch_graph)
+
+    print("rozemberczki2021twitch Dataset Graph Analysis: (Graph 2):")
+    print(f"  Number of vertices: {twitch_graph.vcount()}")
+    print(f"  Number of edges: {twitch_graph.ecount()}")
+    print(f"  Number of degree-0 vertices: {sum(1 for deg in twitch_graph.degree() if deg == 0)}")
+
+    compare_graphs(git_web_graph, twitch_graph)
