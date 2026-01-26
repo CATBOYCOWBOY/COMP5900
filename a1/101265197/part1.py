@@ -1,12 +1,7 @@
-import numpy as np
 import igraph as ig
 import pandas as pd
 import math
-
-def global_clustering_coefficient(graph: ig.Graph) -> float:
-    num_triangles = len(graph.cliques(min=3, max=3))
-    binom_sum = sum(math.comb(deg, 2) for deg in graph.degree() if deg >= 2)
-    return num_triangles / binom_sum if binom_sum > 0 else 0.0
+import statistics
 
 def analyze_git_web_dataset() -> ig.Graph:
     vertices = pd.read_csv('git_web_ml/musae_git_target.csv').set_index('id')
@@ -33,18 +28,20 @@ def analyze_twitch_dataset() -> ig.Graph:
     return graph
 
 def compare_graphs(graph1: ig.Graph, graph2: ig.Graph):
-    print("\n\nGraph Comparison:")
+    deg1 = graph1.degree()
+    deg2 = graph2.degree()
+    print("\nGraph Comparison:")
     print("----------------------------------------\n")
-    print("Graph 1 maximum degree: ", np.max(graph1.degree()))
-    print("Graph 2 maximum degree: ", np.max(graph2.degree()))
-    print("\nGraph 1 average degree: ", np.average(graph1.degree()))
-    print("Graph 2 average degree: ", np.average(graph2.degree()))
-    print("\nMedian degree of Graph 1: ", np.median(graph1.degree()))
-    print("Median degree of Graph 2: ", np.median(graph2.degree()))
-    print("\nGraph 1 density: ", np.sum(graph1.degree()) / math.comb(graph1.vcount(), 2))
-    print("Graph 2 density: ", np.sum(graph2.degree()) / math.comb(graph2.vcount(), 2))
-    print("\nGraph 1 average clustering coefficient: ", global_clustering_coefficient(graph1))
-    print("Graph 2 average clustering coefficient: ", global_clustering_coefficient(graph2))
+    print("Graph 1 maximum degree: ", max(deg1))
+    print("Graph 2 maximum degree: ", max(deg2))
+    print("\nGraph 1 average degree: ", sum(deg1) / len(deg1))
+    print("Graph 2 average degree: ", sum(deg2) / len(deg2))
+    print("\nMedian degree of Graph 1: ", statistics.median(deg1))
+    print("Median degree of Graph 2: ", statistics.median(deg2))
+    print("\nGraph 1 density: ", sum(deg1) / math.comb(graph1.vcount(), 2))
+    print("Graph 2 density: ", sum(deg2) / math.comb(graph2.vcount(), 2))
+    print("\nGraph 1 average clustering coefficient: ", graph1.transitivity_undirected())
+    print("Graph 2 average clustering coefficient: ", graph2.transitivity_undirected())
 
 if __name__ == "__main__":
     git_web_graph = analyze_git_web_dataset()

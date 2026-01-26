@@ -26,16 +26,20 @@ def degree_sequence_graph(source: ig.Graph) -> ig.Graph:
     return ig.Graph.Degree_Sequence(degree_sequence, method="vl")
 
 def random_geometric_graph(source: ig.Graph) -> ig.Graph:
-    avg_deg = np.average(source.degree())
+    degrees = source.degree()
+    avg_deg = sum(degrees) / len(degrees)
 
     # working backwards from the probability that 2 points land within radius r in a unit square of each other
     # where the initial point is minimum r distance from an edge we can find r when the probability (density)
     # and count of points is known
     # it should(?) also work out for a torus which is what we are meant to be using in this question
-    radius = math.sqrt(avg_deg / math.pi)
+    radius = math.sqrt(avg_deg / (math.pi * source.vcount()))
+    # print("RADIUS FOUND:", radius)
     return ig.Graph.GRG(n=source.vcount(), radius=radius, torus=True)
 
 if __name__ == "__main__":
+    print("\n----------------------------------------\n")
+    print("Comparison of Git Web Graph to Various Random Graph Models\n")
     git_web_graph = analyze_git_web_dataset()
 
     g_np = g_np_graph(git_web_graph)
