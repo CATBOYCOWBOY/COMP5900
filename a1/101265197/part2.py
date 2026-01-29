@@ -37,7 +37,8 @@ def random_geometric_graph(source: ig.Graph) -> ig.Graph:
     return generated_graph
 
 # comparisons between the Git Web dataset and our generated graphs
-# I chose this one instead of the Twitch dataset because it was strongly skewed to the right
+# I chose this one instead of the Twitch dataset because the vertex degrees were strongly right skewed when plotted out
+# which I found interesting compared to the more normal distribution of the Twitch dataset degrees
 if __name__ == "__main__":
     print("\n----------------------------------------\n")
     print("Comparison of Git Web Graph (Graph 1) to Various Random Graph Models (Graph 2)\n")
