@@ -6,8 +6,8 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
-# Important - I am not including a requirements.txt file or complete venv with this submission, however this code was 
-# written with Python 3.12.12 in mind, with the following packages installed via pip:
+# Important - this code was written with Python 3.12.12 in mind, with the following packages installed 
+# (specified in included requirements.txt):
 
 # igraph v1.0.0
 # pandas v3.0.0
@@ -16,7 +16,11 @@ import matplotlib.pyplot as plt
 
 # Please use Python 3.12.x (other versions of Python I tested are not guaranteed to have tkinter compatibility, 
 # especially if you are using homebrew) to ensure that python-tk@3.12 can work with the matplotlib TkAgg backend for 
-# displaying histograms. If you do not want to use python 3.12, you can remove the matplotlib.use('TkAgg') line, 
+# displaying histograms. 
+#
+# You can create a virtual environment and install the packages using the env's pip
+# 
+# If you do not want to use python 3.12, you can remove the matplotlib.use('TkAgg') line, 
 # either replace it with matplotlib.use('Qt5Agg') or another interactive MatPltoLib backend of your choice that is 
 # compatible with your system.
 
