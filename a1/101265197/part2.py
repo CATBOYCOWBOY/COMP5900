@@ -1,7 +1,7 @@
 import numpy as np
 import igraph as ig
 import math
-from part1 import analyze_git_web_dataset
+from part1 import retrieve_git_web_dataset
 from part1 import compare_graphs
 
 def g_np_graph(source: ig.Graph) -> ig.Graph:
@@ -36,10 +36,12 @@ def random_geometric_graph(source: ig.Graph) -> ig.Graph:
     generated_graph = ig.Graph.GRG(n=source.vcount(), radius=radius, torus=True)
     return generated_graph
 
+# comparisons between the Git Web dataset and our generated graphs
+# I chose this one instead of the Twitch dataset because it was strongly skewed to the right
 if __name__ == "__main__":
     print("\n----------------------------------------\n")
     print("Comparison of Git Web Graph (Graph 1) to Various Random Graph Models (Graph 2)\n")
-    git_web_graph = analyze_git_web_dataset()
+    git_web_graph = retrieve_git_web_dataset()
 
     g_np = g_np_graph(git_web_graph)
     print("Git Web Graph vs Erdos-Renyi G_n,p Graph Analysis:")

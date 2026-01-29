@@ -26,8 +26,8 @@ import matplotlib.pyplot as plt
 
 HISTOGRAM_BAR_WIDTH = 0.35
 
-
-def analyze_git_web_dataset() -> ig.Graph:
+# Git web dataset of Github users' follow relationships - https://snap.stanford.edu/data/github-social.html
+def retrieve_git_web_dataset() -> ig.Graph:
     vertices = pd.read_csv('git_web_ml/musae_git_target.csv').set_index('id')
     edges = pd.read_csv('git_web_ml/musae_git_edges.csv')
     graph = ig.Graph(
@@ -39,7 +39,8 @@ def analyze_git_web_dataset() -> ig.Graph:
 
     return graph
 
-def analyze_twitch_dataset() -> ig.Graph:
+# Dataset of Twitch gamers' follow relationships - https://snap.stanford.edu/data/twitch_gamers.html
+def retrieve_twitch_dataset() -> ig.Graph:
     vertices = pd.read_csv('twitch_gamers/large_twitch_features.csv')
     edges = pd.read_csv('twitch_gamers/large_twitch_edges.csv')
     graph = ig.Graph(
@@ -114,7 +115,7 @@ def compare_graphs(graph1: ig.Graph, graph2: ig.Graph):
     generate_degree_histogram(graph1, graph2)
 
 if __name__ == "__main__":
-    git_web_graph = analyze_git_web_dataset()
+    git_web_graph = retrieve_git_web_dataset()
 
     print("rozemberczki2019multiscale Github Web Dataset Graph Analysis (Graph 1):")
     print(f"  Number of vertices: {git_web_graph.vcount()}")
@@ -123,7 +124,7 @@ if __name__ == "__main__":
 
     print("\n----------------------------------------\n")
 
-    twitch_graph = analyze_twitch_dataset()
+    twitch_graph = retrieve_twitch_dataset()
 
     print("rozemberczki2021twitch Dataset Graph Analysis: (Graph 2):")
     print(f"  Number of vertices: {twitch_graph.vcount()}")
