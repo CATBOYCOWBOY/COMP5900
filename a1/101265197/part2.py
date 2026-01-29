@@ -29,26 +29,25 @@ def random_geometric_graph(source: ig.Graph) -> ig.Graph:
     degrees = source.degree()
     avg_deg = sum(degrees) / len(degrees)
 
-    # working backwards from the probability that 2 points land within radius r in a unit square of each other
-    # where the initial point is minimum r distance from an edge we can find r when the probability (density)
-    # and count of points is known
-    # it should(?) also work out for a torus which is what we are meant to be using in this question
+    # worked this out assuming area of 1 and this radius formula generates ~= mean degree on both graphs (github and twitch)
+    # although there is variation of small margin (less than .1 avg degree), the expected value of a vertex's degree should
+    # always be avg_deg
     radius = math.sqrt(avg_deg / (math.pi * source.vcount()))
-    # print("RADIUS FOUND:", radius)
-    return ig.Graph.GRG(n=source.vcount(), radius=radius, torus=True)
+    generated_graph = ig.Graph.GRG(n=source.vcount(), radius=radius, torus=True)
+    return generated_graph
 
 if __name__ == "__main__":
     print("\n----------------------------------------\n")
-    print("Comparison of Git Web Graph to Various Random Graph Models\n")
+    print("Comparison of Git Web Graph (Graph 1) to Various Random Graph Models (Graph 2)\n")
     git_web_graph = analyze_git_web_dataset()
 
     g_np = g_np_graph(git_web_graph)
-    print("Git Web Graph vs Erdos-Renyi G(n, p) Graph Analysis:")
+    print("Git Web Graph vs Erdos-Renyi G_n,p Graph Analysis:")
     compare_graphs(git_web_graph, g_np)
     print("----------------------------------------")
 
     g_nm = g_nm_graph(git_web_graph)
-    print("Git Web Graph vs Erdos-Renyi G(n, m) Graph Analysis:")
+    print("Git Web Graph vs Erdos-Renyi G_n,m Graph Analysis:")
     compare_graphs(git_web_graph, g_nm)
     print("----------------------------------------")
 
