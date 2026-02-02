@@ -99,7 +99,7 @@ def generate_degree_histogram(graph1: ig.Graph, graph2: ig.Graph):
 
 def compare_graphs(graph1: ig.Graph, graph2: ig.Graph):
     deg1 = graph1.degree()
-    deg2 = graph2.degree()
+    deg2 = graph2.degree()  
     print("\nGraph Comparison:")
     print("----------------------------------------\n")
     print("Graph 1 maximum degree: ", max(deg1))
@@ -108,10 +108,17 @@ def compare_graphs(graph1: ig.Graph, graph2: ig.Graph):
     print("Graph 2 average degree: ", sum(deg2) / len(deg2))
     print("\nMedian degree of Graph 1: ", statistics.median(deg1))
     print("Median degree of Graph 2: ", statistics.median(deg2))
-    print("\nGraph 1 density: ", sum(deg1) / math.comb(graph1.vcount(), 2))
-    print("Graph 2 density: ", sum(deg2) / math.comb(graph2.vcount(), 2))
-    print("\nGraph 1 average clustering coefficient: ", graph1.transitivity_undirected())
-    print("Graph 2 average clustering coefficient: ", graph2.transitivity_undirected())
+    print("\nGraph 1 density: ", (sum(deg1) / 2) / math.comb(graph1.vcount(), 2))
+    print("Graph 2 density: ", (sum(deg2) / 2) / math.comb(graph2.vcount(), 2))
+
+    graph_1_coefficients = graph1.transitivity_local_undirected(mode="zero")
+    graph_2_coefficients = graph2.transitivity_local_undirected(mode="zero")
+    graph_1_global = sum([graph_1_coefficients[i] for i, deg in enumerate(deg1) if deg >= 2]) / len([deg for deg in deg1 if deg >= 2])
+    graph_2_global = sum([graph_2_coefficients[i] for i, deg in enumerate(deg2) if deg >= 2]) / len([deg for deg in deg2 if deg >= 2])
+
+    print("\nGraph 1 average clustering coefficient: ", graph_1_global)
+    print("Graph 2 average clustering coefficient: ", graph_2_global)
+
     generate_degree_histogram(graph1, graph2)
 
 if __name__ == "__main__":
