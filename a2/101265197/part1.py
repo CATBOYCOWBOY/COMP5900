@@ -60,17 +60,30 @@ def degree_centrality_top_50(graph: ig.Graph) -> list[str]:
     top_50_indices = np.argsort(centrality)[-50:][::-1]
     return [graph.vs[i]["name"] for i in top_50_indices]
 
-def eigenvector_centrality(graph: ig.Graph) -> list[float]:
-    pass
+def eigenvector_centrality_top_50(graph: ig.Graph) -> list[str]:
+    centrality = graph.eigenvector_centrality()
 
-def pagerank_centrality(graph: ig.Graph, damping: float) -> list[float]:
-    pass
+    top_50_indices = np.argsort(centrality)[-50:][::-1]
+    return [graph.vs[i]["name"] for i in top_50_indices]
 
-def hub_score(graph: ig.Graph) -> float:
-    pass
+def pagerank_centrality_top_50(graph: ig.Graph, damping: float) -> list[str]:
+    centrality = graph.personalized_pagerank(damping)
 
-def authority_score() -> float:
-    pass
+    top_50_indices = np.argsort(centrality)[-50:][::-1]
+    return [graph.vs[i]["name"] for i in top_50_indices]
+
+def hub_score_top_50(graph: ig.Graph) -> list[str]:
+    score = graph.hub_score()
+
+    top_50_indices = np.argsort(score)[-50:][::-1]
+    return [graph.vs[i]["name"] for i in top_50_indices]
+
+
+def authority_score_top_50(graph: ig.Graph) -> list[str]:
+    score = graph.authority_score()
+
+    top_50_indices = np.argsort(score)[-50:][::-1]
+    return [graph.vs[i]["name"] for i in top_50_indices]
 
 def print_graph_stats(graph: ig.Graph, name: str):
     print(f"{name} graph stats:")
@@ -89,6 +102,35 @@ def print_graph_stats(graph: ig.Graph, name: str):
         print(f"{idx + 1}. {vertex}")
     
     print(f"\n-----------------------------------------\n")
+
+    print(f"Top 50 vertices in eigenvector centrality:")
+    for idx, vertex in enumerate(eigenvector_centrality_top_50(graph)):
+        print(f"{idx + 1}. {vertex}")
+    
+    print(f"\n-----------------------------------------\n")
+
+    print(f"Top 50 vertices in pagerank centrality (no damping):")
+    for idx, vertex in enumerate(pagerank_centrality_top_50(graph, 0.0)):
+        print(f"{idx + 1}. {vertex}")
+    
+    print(f"\n-----------------------------------------\n")
+
+    print(f"Top 50 vertices in pagerank centrality (damping of 0.85):")
+    for idx, vertex in enumerate(pagerank_centrality_top_50(graph, 0.85)):
+        print(f"{idx + 1}. {vertex}")
+    
+    print(f"\n-----------------------------------------\n")
+
+    print(f"Top 50 vertices in Kleinberg's hub score:")
+    for idx, vertex in enumerate(hub_score_top_50(graph)):
+        print(f"{idx + 1}. {vertex}")
+    
+    print(f"\n-----------------------------------------\n")
+
+    print(f"Top 50 vertices in Kleinberg's authority score:")
+    for idx, vertex in enumerate(authority_score_top_50(graph)):
+        print(f"{idx + 1}. {vertex}")
+    
     
     print("\n\n\n")
 
