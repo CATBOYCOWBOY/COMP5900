@@ -1,4 +1,9 @@
 a1/.venv/
 a1/101265197/git_web_ml
 a1/101265197/twitch_gamers
+
+a2/.venv/
+a2/101265197/directed/
+a2/101265197/undirected/
+
 *.zip
