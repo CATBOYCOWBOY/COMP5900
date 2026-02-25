@@ -4,13 +4,25 @@ import numpy as np
 # This script was written with python 3.13.x in mind. It will likely require python version 3.12 or above to work
 # out of the box.
 
+# The information on the reddit dataset on the SNAP site also seems to be innacurate, in my testing there are 
+# 67,180 unique subreddit names between the two tsv files. The website indicates 55,863. 
+
+# The SNAP information on the Wikipedia dataset also does not match mine. Even after normalizing all capitalization and
+# whitespace, we're still left with ~400 more vertices than SNAP indicates.
+
 def retrieve_reddit_dataset() -> ig.Graph:
     edges = []
     with open("directed/soc-redditHyperlinks-body.tsv") as f:
-        next(f)  # skip header
+        next(f)  # skipping header, this isn't an actual edge
         for line in f:
-            parts = line.split("\t")
-            edges.append((parts[0], parts[1]))
+            columns = line.split("\t")
+            edges.append((columns[0].lower(), columns[1].lower()))
+
+    with open("directed/soc-redditHyperlinks-title.tsv") as f:
+        next(f)
+        for line in f:
+            columns = line.split("\t")
+            edges.append((columns[0].lower(), columns[1].lower()))
 
     vertices = list(set(v for edge in edges for v in edge))
     vertex_to_id = {v: i for i, v in enumerate(vertices)}
@@ -28,9 +40,9 @@ def retrieve_wiki_dataset() -> ig.Graph:
         for line in f:
             line = line.strip()
             if line.startswith("SRC:"):
-                src = line[4:]
+                src = line[4:].lower()
             elif line.startswith("TGT:"):
-                tgt = line[4:]
+                tgt = line[4:].lower()
                 # This is a check to make sure that we're actually getting a real user's vote
                 # There are many instances of (see: line 5657) unnamed voters issuing votes, and this results in
                 # an unnamed voter being marked as very central. 
@@ -67,7 +79,7 @@ def eigenvector_centrality_top_50(graph: ig.Graph) -> list[str]:
     return [graph.vs[i]["name"] for i in top_50_indices]
 
 def pagerank_centrality_top_50(graph: ig.Graph, damping: float) -> list[str]:
-    centrality = graph.personalized_pagerank(damping)
+    centrality = graph.personalized_pagerank(damping=damping)
 
     top_50_indices = np.argsort(centrality)[-50:][::-1]
     return [graph.vs[i]["name"] for i in top_50_indices]
@@ -90,7 +102,7 @@ def print_graph_stats(graph: ig.Graph, name: str):
     print(f"-----------------------------------------\n")
 
     print(f"Vertex count: {graph.vcount()}")
-    print(f"Edge count: {np.sum(graph.degree(mode="out"))}")
+    print(f"Edge count: {graph.ecount()}")
     print(f"Number of degree 0 vertices: {np.sum(np.array(graph.degree()) == 0)}")
 
     print(f"-----------------------------------------\n")
