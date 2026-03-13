@@ -44,7 +44,7 @@ def retrieve_wiki_dataset() -> ig.Graph:
             elif line.startswith("TGT:"):
                 tgt = line[4:].lower()
                 # This is a check to make sure that we're actually getting a real user's vote
-                # There are many instances of (see: line 5657) unnamed voters issuing votes, and this results in
+                # There are many instances of (see: line 5657 for an example) unnamed voters issuing votes, and this results in
                 # an unnamed voter being marked as very central. 
                 # Since we don't know if the unnamed votes come from one or multiple users, I am electing to exclude
                 # them from calculations.
