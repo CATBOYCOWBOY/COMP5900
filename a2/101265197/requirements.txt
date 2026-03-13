@@ -1,0 +1,5 @@
+igraph == 1.0.0
+pandas == 3.0.0
+numpy == 2.4.1
+richclub == 1.0.2.dev1
+networkx == 3.6.1
