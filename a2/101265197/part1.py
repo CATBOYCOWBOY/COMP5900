@@ -4,6 +4,8 @@ import numpy as np
 # This script was written with python 3.14.2 or 3.13.x in mind. It will likely require python version 3.12 or above to work
 # out of the box. Please use python 3.14.2 or latest for maximum compatibility
 
+# The requirements.txt assumes the aforementioned python version is used.
+
 # The information on the reddit dataset on the SNAP site also seems to be innacurate, in my testing there are 
 # 67,180 unique subreddit names between the two tsv files. The website indicates 55,863. 
 
