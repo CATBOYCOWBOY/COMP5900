@@ -42,6 +42,9 @@ ground_truth = [0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,
 
 ecg = community_ecg(g)
 
+print(f"Communities found: {len(ecg)}")                                                                                                                                                     
+
+
 ami = adjusted_mutual_info_score(ground_truth, ecg.membership)
 print(f"{'Algorithm':<20} {'AMI Score':>10}")
 print("-" * 31)
