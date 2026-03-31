@@ -6,6 +6,11 @@ a2/101265197/.venv/
 a2/101265197/directed/
 a2/101265197/undirected/
 
+a3/101265197/.venv/
+
+
 .claude
 
 *.zip
+
+.vscode

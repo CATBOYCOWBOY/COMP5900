@@ -1,0 +1,12 @@
+Original question (5.9, Q1)
+
+Run various clustering algorithms (ECG, Leiden, Louvain, In-
+fomap, Label Propagation, Girvan-Newman, and CNM) for
+the karate club graph. For each algorithm tested, compare the par-
+tition found by the algorithm with the ground-truth (two commu-
+nities) by computing the AMI score.
+
+I chose this excercise as it explores a wide array of algorithms we cover in class or the textbook on a small and well
+known dataset, making ground truth easy to compare to.
+
+I decided to write a function for each of the clustering algorithms in question that would return 

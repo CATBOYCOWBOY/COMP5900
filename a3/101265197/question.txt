@@ -1,5 +1,0 @@
-Run various clustering algorithms (ECG, Leiden, Louvain, In-
-fomap, Label Propagation, Girvan-Newman, and CNM) for
-the karate club graph. For each algorithm tested, compare the par-
-tition found by the algorithm with the ground-truth (two commu-
-nities) by computing the AMI score.
