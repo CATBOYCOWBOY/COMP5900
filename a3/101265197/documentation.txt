@@ -25,7 +25,8 @@ known dataset, making ground truth comparison/AMI score fairly straightforward.
 With only `default settings, I saw performance of >0.3 for all algorithms tested. With some parameter tuning:
 
   - Increase in ensemble size for ECG from default value improved clustering accuracy significantly. ECG would pick up
-    4-5 communities on ensemble size of 16, but stabilizes to 2-3 with ensemble size of 32.
+    4-5 communities on ensemble size of 16, but stabilizes to 2-3 with ensemble size of 32. I did not notice as significant
+    of a change going from 32->64->128, so kept 64 as a good place to leave it.
   - For the Leiden algorithm, optimizing for modularity makes more sense than CPM as our ground truth has only 2 
     communities. Similarly, a lowered resolution actually improved performance as it prevented the algorithm from
     picking up nonexistent communities.
