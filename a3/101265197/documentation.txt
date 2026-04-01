@@ -6,9 +6,10 @@ Note - exercise1.py and the attached requirements.txt was written with Python ve
 versions (>3.12.x) may work, but no guarantees (due to pyqt5/matplotlib requirements).
 requirements.txt includes the full set of dependencies needed to write the script.
 
-To run the exercise1.py script, create a virtual environment with Python 3.14.x and install the dependencies with pip. 
+To run the exercise1.py script, create a virtual environment with Python 3.14.x ($python3.14 or python3 -m venv <venv-name>) 
+and install the dependencies from requirements.txt with pip. 
 
-AMI scores will be displayed in a pyqt5 window as well as saved to ./exercise1-ami-scores.png
+AMI scores will be displayed in a pyqt5 window as well as saved to ./outputs/exercise1-ami-scores.png
 
 Original question (5.9, Q1):
 

@@ -91,6 +91,6 @@ plt.ylabel('AMI Score')
 plt.title("Community Detection Algorithms' vs. Karate Club Community Ground Truth (AMI)")
 plt.xticks(rotation=15, ha='right')
 plt.tight_layout()
-plt.savefig('exercise1-ami-scores.png', dpi=150)
+plt.savefig('./outputs/exercise1-ami-scores.png', dpi=150)
 plt.show()
 
