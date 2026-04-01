@@ -1,4 +1,8 @@
-Original question (5.9, Q1)
+COMP4900 W26 A3
+Tom Fan
+101 265 197
+
+Original question (5.9, Q1):
 
 Run various clustering algorithms (ECG, Leiden, Louvain, In-
 fomap, Label Propagation, Girvan-Newman, and CNM) for
@@ -9,4 +13,21 @@ nities) by computing the AMI score.
 I chose this excercise as it explores a wide array of algorithms we cover in class or the textbook on a small and well
 known dataset, making ground truth comparison/AMI score fairly straightforward.
 
-I decided to write a function for each of the clustering algorithms in question that would return 
+With only `default settings, I saw performance of >0.3 for all algorithms tested. With some parameter tuning:
+
+  - Increase in ensemble size for ECG from default value improved clustering accuracy significantly. ECG would pick up
+    4-5 communities on ensemble size of 16, but stabilizes to 2-3 with ensemble size of 32.
+  - For the Leiden algorithm, optimizing for modularity makes more sense than CPM as our ground truth has only 2 
+    communities. Similarly, a lowered resolution actually improved performance as it prevented the algorithm from
+    picking up nonexistent communities.
+
+With these adjustments, the worst performing algorithms bottom out at AMI of 0.45 (ECG, worst case observed), which is 
+significantly better than random clustering performance. 
+
+One interesting observation is that while non deterministic, label propagation often performed the best out of all algorithms.
+This is not too suprising as consensus in a "simple" case like the karate graph should roughly decay to the
+ground truth.
+
+Also, the naming scheme for clustering algorithms in iGraph will sometimes reflect the name of the algorithm and 
+sometimes the backing principle behind the algorithm (see: Newman vs "Graph.community_edge_betweenness()"). In these
+cases it is helpful to check the source code itself.

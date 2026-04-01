@@ -1,13 +1,15 @@
 import igraph as ig
+import networkx as nx
 from partition_igraph import community_ecg
 from sklearn.metrics import adjusted_mutual_info_score
 
 g = ig.Graph.Famous('Zachary')
 
-# Ground truth: two factions from Zachary (1977), 0-indexed
+# Ground truth: factions from Zachary (1977), 0-indexed
 # ground_truth[i] == 0 => Mr. Hi's group, 1 => Officer John A's group
-# Sourced from Wikipedia https://en.wikipedia.org/wiki/Zachary%27s_karate_club
-ground_truth = [0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1]
+# Sourced from networkx's karate_club_graph(), which follows the original paper
+_nx_karate = nx.karate_club_graph()
+ground_truth = [0 if _nx_karate.nodes[n]['club'] == 'Mr. Hi' else 1 for n in sorted(_nx_karate.nodes())]
 
 print("Asessing communities found with community detection algorithms:")
 print("-" * 31)
@@ -17,7 +19,7 @@ print("-" * 31)
 
 # -----------------------------------------------
 # ECG community detection:
-# I tried default ensemble size from textbook (see: p150), but increasing the ensemble size seems to marginally improve
+# I tried default ensemble size of 16, but increasing the ensemble size seems to marginally improve
 # AMI
 ecg = community_ecg(g, ens_size=32)
 
@@ -29,6 +31,7 @@ print(f"{'ECG':<20} {ami:>10.4f}")
 
 # I think modularity is better in this situation since we know ground truth only has 2 communities
 # We're not missing out on any small communities by optimizing for edge density within community
+# Lowered resolution also improves AMI somewhat
 leiden_partition = g.community_leiden(
     objective_function="modularity",
     resolution=0.6
