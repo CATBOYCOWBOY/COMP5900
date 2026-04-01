@@ -7,6 +7,6 @@ tition found by the algorithm with the ground-truth (two commu-
 nities) by computing the AMI score.
 
 I chose this excercise as it explores a wide array of algorithms we cover in class or the textbook on a small and well
-known dataset, making ground truth easy to compare to.
+known dataset, making ground truth comparison/AMI score fairly straightforward.
 
 I decided to write a function for each of the clustering algorithms in question that would return 

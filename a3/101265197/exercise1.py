@@ -1,51 +1,80 @@
 import igraph as ig
+from partition_igraph import community_ecg
 from sklearn.metrics import adjusted_mutual_info_score
-
-
-def community_ecg(g, t=16, min_weight=0.05):
-    """
-    Ensemble Clustering for Graphs (ECG) - Poulin & Théberge (2019).
-
-    Runs Louvain t times, weights each edge by how often its endpoints
-    were in the same community, then runs a final Louvain on the
-    weighted graph.
-
-    Parameters:
-        g          : igraph Graph
-        t          : ensemble size (number of Louvain runs)
-        min_weight : minimum edge weight (for edges never co-assigned)
-
-    Returns:
-        VertexClustering from the final weighted Louvain run
-    """
-    co_counts = [0] * g.ecount()
-
-    for _ in range(t):
-        partition = g.community_multilevel()
-        membership = partition.membership
-        for i, edge in enumerate(g.es):
-            if membership[edge.source] == membership[edge.target]:
-                co_counts[i] += 1
-
-    weights = [min_weight + (1 - min_weight) * (c / t) for c in co_counts]
-    g.es['weight'] = weights
-
-    return g.community_multilevel(weights='weight')
-
 
 g = ig.Graph.Famous('Zachary')
 
 # Ground truth: two factions from Zachary (1977), 0-indexed
 # ground_truth[i] == 0 => Mr. Hi's group, 1 => Officer John A's group
-# Sourced from Wikipedia
+# Sourced from Wikipedia https://en.wikipedia.org/wiki/Zachary%27s_karate_club
 ground_truth = [0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1]
 
-ecg = community_ecg(g)
+print("Asessing communities found with community detection algorithms:")
+print("-" * 31)
 
-print(f"Communities found: {len(ecg)}")                                                                                                                                                     
-
-
-ami = adjusted_mutual_info_score(ground_truth, ecg.membership)
 print(f"{'Algorithm':<20} {'AMI Score':>10}")
 print("-" * 31)
+
+# -----------------------------------------------
+# ECG community detection:
+# I tried default ensemble size from textbook (see: p150), but increasing the ensemble size seems to marginally improve
+# AMI
+ecg = community_ecg(g, ens_size=32)
+
+ami = adjusted_mutual_info_score(ground_truth, ecg.membership)
 print(f"{'ECG':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# Leiden community detection:
+
+# I think modularity is better in this situation since we know ground truth only has 2 communities
+# We're not missing out on any small communities by optimizing for edge density within community
+leiden_partition = g.community_leiden(
+    objective_function="modularity",
+    resolution=0.6
+)
+
+ami = adjusted_mutual_info_score(ground_truth, leiden_partition.membership)
+print(f"{'Leiden':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# Louvain community detection:
+
+louvain_partition = g.community_multilevel()
+
+ami = adjusted_mutual_info_score(ground_truth, louvain_partition.membership)
+print(f"{'Louvain':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# Infomap community detection:
+
+# differing trial counts seems to have no further returns past 10 trials (default)
+infomap_partition = g.community_infomap()
+
+ami = adjusted_mutual_info_score(ground_truth, infomap_partition.membership)
+print(f"{'Infomap':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# Label propagation community detection:
+
+label_partition = g.community_label_propagation()
+
+ami = adjusted_mutual_info_score(ground_truth, label_partition.membership)
+print(f"{'Label propagation':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# Girvan-newman community detection:
+
+gn_partition = g.community_edge_betweenness().as_clustering(n=2)
+
+ami = adjusted_mutual_info_score(ground_truth, gn_partition.membership)
+print(f"{'Girvan-newman':<20} {ami:>10.4f}")
+
+# -----------------------------------------------
+# CNM community detection:
+
+cnm_partition = g.community_fastgreedy().as_clustering(n=2)
+
+ami = adjusted_mutual_info_score(ground_truth, cnm_partition.membership)
+print(f"{'CNM':<20} {ami:>10.4f}")
+
