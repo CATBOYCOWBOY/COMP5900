@@ -57,7 +57,8 @@ record('Louvain', louvain_partition)
 # -----------------------------------------------
 # Infomap community detection:
 
-# differing trial counts seems to have no further returns past 10 trials (default)
+# differing trial counts seems to have no further returns past 10 trials (default). Reduced trial counts negatively 
+# impact clustering effectiveness
 infomap_partition = g.community_infomap()
 record('Infomap', infomap_partition)
 
