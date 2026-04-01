@@ -7,7 +7,7 @@ versions (>3.12.x) may work, but no guarantees (due to pyqt5/matplotlib requirem
 requirements.txt includes the full set of dependencies needed to write the script.
 
 To run the exercise1.py script, create a virtual environment with Python 3.14.x ($python3.14 or python3 -m venv <venv-name>) 
-and install the dependencies from requirements.txt with pip. 
+and install the dependencies from requirements.txt with pip, using the venv ($pip install -r ./requirements.txt). 
 
 AMI scores will be displayed in a pyqt5 window as well as saved to ./outputs/exercise1-ami-scores.png
 
@@ -36,6 +36,11 @@ significantly better than random clustering performance.
 One interesting observation is that while non deterministic, label propagation often performed the best out of all algorithms.
 This is not too suprising as consensus in a "simple" case like the karate graph should roughly decay to the
 ground truth.
+
+Additionally, due to its even more nondeterministic nature ECG will (on occasion) underperform compared to Louvain. I had
+assumed that groupings across Louvain runs would result in stable communities or that some sort of limit would be hit and
+we would see ECG converge to ground truth eventually, but there seems to be enough noise in the data that this does not
+happen.
 
 Also, I learned the naming scheme for clustering algorithms in iGraph will sometimes reflect the name of the algorithm and 
 sometimes the backing principle behind the algorithm (see: Newman vs "Graph.community_edge_betweenness()"). In these
