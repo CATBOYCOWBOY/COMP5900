@@ -33,7 +33,7 @@ def record(name, partition):
 # ECG community detection:
 # I tried default ensemble size of 16, but increasing the ensemble size seems to marginally improve
 # AMI
-ecg = community_ecg(g, ens_size=32)
+ecg = community_ecg(g, ens_size=128)
 record('ECG', ecg)
 
 # -----------------------------------------------
